@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+     which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!-- One method to get references from the online citation libraries.
+     There has to be one entity for each item to be referenced. 
+     An alternate method (rfc include) is described in the references. -->
+
+<!--<!ENTITY RFC2629 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2629.xml">-->
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs), 
+     please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+     (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space 
+     (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- do not display copyright and other IETF-related stuff -->
+<?rfc private="(c) GROUP 26, 2014" ?>
+
+<rfc category="info" docName="draft-ietf-xml2rfc-template-05" ipr="trust200902">
+  <!-- category values: std, bcp, info, exp, and historic
+     ipr values: full3667, noModification3667, noDerivatives3667
+     you can add the attributes updates="NNNN" and obsoletes="NNNN" 
+     they will automatically be output with "(if approved)" -->
+
+  <!-- ***** FRONT MATTER ***** -->
+
+  <front>
+    <!-- The abbreviated title is used in the page header - it is only necessary if the 
+         full title is longer than 39 characters -->
+
+    <title abbrev="Group 26 c2w protocol specification">Group 26: c2w protocol specification proposal
+    </title>
+
+    <!-- add 'role="editor"' below for the editors if appropriate -->
+
+ <author fullname="Alex Baudot" initials="A"
+            surname="BAUDOT">
+	<address>
+	<email>axel.baudot@telecom-bretagne.eu</email>
+	</address>
+    </author>
+	<author fullname="Biwei Cui" initials="B"
+            surname="CUI">
+	<address>
+	<email>biwei.cui@telecom-bretagne.eu</email>
+	</address>
+    </author>
+	<author fullname="Mark Jerrim" initials="M"
+            surname="JERRIM">
+			<address>
+	<email>mark.jerrim@telecom-bretagne.eu</email>
+	</address>
+    </author>
+    <author fullname="Maurice KETEVI" initials="M"
+            surname="KETEVI">
+      <organization>Telecom Bretagne</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <!-- Reorder these if your country does things differently -->
+
+          <city>Brest</city>
+
+          <region></region>
+
+          <code></code>
+
+          <country>France</country>
+        </postal>
+
+        
+
+        <email>maurice.ketevi@telecom-bretagne.eu</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <date month="Mar" year="2014" />
+
+    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
+         in the current day for you. If only the current year is specified, xml2rfc will fill 
+	 in the current day and month for you. If the year is not the current one, it is 
+	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the 
+	 purpose of calculating the expiry date).  With drafts it is normally sufficient to 
+	 specify just the year. -->
+
+    <keyword>c2w</keyword>
+
+    <!-- Keywords will be incorporated into HTML output
+         files in a meta tag but they have no effect on text or nroff
+         output. If you submit your draft to the RFC Editor, the
+         keywords will be used for the search engine. -->
+
+    <abstract>
+      <t>The c2w protocol is a session-based protocol which supports the application Chat While Watching(c2w). The protocol allows the use of either TCP or UDP by the client. </t>
+    </abstract>
+  </front>
+	
+
+  <middle>
+    <section title="Introduction">
+      <t>The c2w protocol is a session-based protocol which supports the application Chat While Watching(c2w). The protocol allows the use of either TCP or UDP by the client. The server will respond with the same layer four protocol. All messages use the same format. </t>
+
+    </section>
+     <section title="Packet format">
+	    <t>
+    <figure align="center" anchor="sample_pkt2">
+    <artwork>
+	0                   1                   2                   3
+	0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+	+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	|   Message | RF|    Expected   |   Sent Seq    |    Packet     |
+	|   Type    |   |     Seq No    |      No       |    Length     |
+	+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	|                                                               |
+	|                        User Name                              |
+	|                                                               |
+	|                                                               |
+	+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	|                         IP Address                            |
+	+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	|         Port Number           |                               |
+	+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               |
+	|                                                               |
+	.                                                               .
+	.                       Message Data (variable)                 .
+	.                                                               .
+	|                                                               |
+	+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+        </artwork></figure></t>
+ 
+
+	<t>
+    Message Type:  6 bits coded in binary.
+	</t>
+	<texttable anchor="type_of_message" title="Currently defined message types">
+          <preamble></preamble>
+
+          <ttcol align="center">Type</ttcol>
+
+          <ttcol align="center">Meaning</ttcol>
+
+          <c>0</c>
+
+          <c>Login Request</c>
+
+          <c>1</c>
+
+          <c>Connection Success</c>
+
+          <c>2</c>
+
+          <c>Movie Request</c>
+		  
+		  <c>3</c>
+
+          <c>Movie Connection To Join Room</c>
+		  
+		  <c>4</c>
+
+          <c>Chat Message</c>
+		  
+		  <c>5</c>
+
+          <c>Leave Room</c>
+		  
+		  <c>6</c>
+
+          <c>Error Message</c>
+		  
+		  <c>7</c>
+
+          <c>Leave Acknowledgement</c>
+          
+          <c>8</c>
+
+          <c>Movie List</c>
+          
+          <c>9</c>
+
+          <c>User List</c>
+
+          <postamble> </postamble>
+        </texttable>
+	<t>Room Flag:   2 bits coded in binary.<list
+          hangIndent="10" style="empty">
+		  <t>The Room Flag is '00' to indicate 'A' for Main Room, '01' indicates 'M' for movie room and '10' indicates 'P' for private room</t>
+		  </list></t>
+	<t>Expected Sequence Number:   8 bits coded in binary.<list
+          hangIndent="10" style="empty">
+		  <t>The Sequence number expected by the receiver</t>
+		  </list></t>
+	<t>Sent	Sequence Number:   8 bits coded in binary.<list
+          hangIndent="10" style="empty">
+		  <t>The current Sequence number being sent</t>
+		  </list></t>
+	<t>Packet Length:    8 bits coded in binary.<list
+          hangIndent="10" style="empty">
+		  <t>The length of the packet in bits</t>
+		  </list></t>
+	<t>User Name:    32 bytes in plain text.<list
+          hangIndent="10" style="empty">
+		  <t>Login name of the user</t>
+		  </list></t>
+	<t>IP Address:   32 bits coded in binary.<list
+          hangIndent="10" style="empty">
+		  <t>The source IP Address</t>
+		  </list></t>
+	<t>Port Number:  16 bits coded in binary.<list
+          hangIndent="10" style="empty">
+		  <t>The source port number</t>
+		  </list></t>
+    </section>
+	
+	<section title="Message Type Contents">
+      <t>
+	  Message Type 0 - Login Request.
+	  Message Data is left empty.
+	  </t>
+	        <t>
+	  Message Type 1 - Connection Success.
+	  Message Data is left empty.
+	  </t>
+	        <t>
+	  Message Type 2 - Movie Request.
+	  Message data contains the text of the movie title.
+	  </t>
+	        <t>
+	  Message Type 3 - Movie Connection To Join Room.
+	  Message Data is left empty.
+	  </t>
+	        <t>
+	  Message Type 4 - Chat Message.
+	  Message data contains the text of the chat message. 
+	   
+	  </t>
+	        <t>
+	  Message Type 5 - Leave Room.
+	  Message Data is left empty.
+	  </t>
+	        <t>
+	  Message Type 6 - Error Message.
+	  Message Data is the text of any error message produced.
+	  </t>
+	        <t>
+	  Message Type 7 - Leave Acknowledgement.
+	  Message Data is left empty.
+	  </t>
+	  	        <t>
+	  Message Type 8 - Movie List.
+	  Message data contains a text list of available movies in the format: Title, IP Address, Port Number 
+	  Each tuple is delimited by the sequence \n
+	  </t>
+	  	        <t>
+	  Message Type 9 - User List.
+	  Message data contains a text list of users in the current room in the format: Username 
+	  Each username is delimited by the sequence \n
+	  </t>
+
+    </section>
+    <section title="Example scenarios">
+    <section title="Scenario 1: user login, movie request and chat message">
+    <t>
+    The client sends a user login request (Message type 0) to the server. The message data for this message type should be empty. If the user login is successful the server responds with 3 packets, a message type 1 (connection successful), a message type 8 (listing the movies available) and a message type 9 (listing the users who are online). 
+	The user selects a movie from the list and the client then sends a message type 2 (Movie request) to connect to a particular movie room. This packet contains the IP address and port number of the requested movie. The server responds to this with a message type 3 (Movie connect) which connects the client to the movie. 
+	The user may then send a chat message to the users in the same room. The client sends a message type 4 (Chat message) to the server which then sends the same message to the other users in the movie room.
+	When the user is finished, he clicks on the leave button in the application. The client then sends a message type 5 (Leave room) to the server, which responds with a message type 7 (Leave Ack) to acknowledge that the connection is now closed.
+		
+    </t>
+
+    <t>
+    <figure>
+    <artwork>
+
+		Client                                       Server
+		|                                               |
+		|             Message 1 (0-Login Request)       |
+		|----------------------------------------------&gt;|
+		|            (details of the message)           |
+		|                                               |
+		|                                               |
+		|             Message 2 (Type 1-Response)       |
+		|&lt;----------------------------------------------|
+		|              (Connection Success)             |
+		|                                               |
+		|                                               |
+		|             Message 3 (Type 8-Movie List)     |
+		|&lt;----------------------------------------------|
+		|               (List of movies)                |
+		|                                               |
+		|             Message 4 (Type 9-User List)      |
+		|&lt;----------------------------------------------|
+		|               (List of users online)          |
+		|                                               |
+		|             Message 5 (Type 2-Movie Request)  |
+		|----------------------------------------------&gt;|
+		|             (Join Movie Room)                 |
+		|                                               |
+		|                                               |
+		|             Message 6 (Type 3-Movie Connect)  |
+		|&lt;----------------------------------------------|
+		|             (Server connects client to        |
+		|                     Movie room)               |
+		|                                               |
+		|             Message 7 (Type 4-Chat Message)   |
+		|----------------------------------------------&gt;|
+		|             (Client sends message)            |
+		|                                               |
+		|                                               |
+		|            Message 8 (Type 4-Chat Message)    |
+		|&lt;----------------------------------------------|
+		|             (Server sends message to          |
+		|                users in Movie room)           |
+		|                                               |
+		|            Message 9 (Type 5-Leave Room)      |
+		|----------------------------------------------&gt;|
+		|             (Client clicks on leave button)   |
+		|                                               |
+		|                                               |
+		|            Message 10 (Type 7-Leave Ack)      |
+		|&lt;----------------------------------------------|
+		|             (Server responds to leave         |
+		|                request)                       |
+		|                                               |
+        
+    </artwork></figure></t>
+       </section><!--End of example 1-->
+     <section title="Scenario 2: function of the sequence numbers">
+    <t>
+        The sequence number is used to keep track of packets lost during transmission. When the client in scenario 1 sends a user login request (Message type 0) to the server, the first message sets the sent sequence number(SSN) to 1 and the expected sequence number(ESN) to 1. If the user login is successful the server responds with 3 packets, a message type 1 (connection successful) with the SSN set to 1 and the ESN set to 2, a message type 8 (listing the movies available) with the SSN set to 2 and the ESN set to 2 and a message type 9 (listing the users who are online) with the SSN set to 3 and the ESN set to 2. 
+	The user selects a movie from the list and the client then sends a message type 2 (Movie request) with the SSN set to 2 and the ESN set to 4.
+		
+    </t>  
+     <t>
+    <figure>
+    <artwork>
+             Client                                           Server
+                |                                               |
+                |             Message 1 (0-Login Request)       |
+   (ESN 1 SSN 1)|----------------------------------------------&gt;|
+                |                                               |
+                |                                               |
+                |                                               |
+                |             Message 2 (Type 1-Response)       |
+                |&lt;----------------------------------------------| (ESN 2 SSN 1)
+                |                                               |
+                |                                               |
+                |                                               |
+                |             Message 3 (Type 8-Movie List)     |
+                |&lt;----------------------------------------------| (ESN 2 SSN 2)
+                |                                               | 
+                |                                               |
+                |             Message 4 (Type 9-User List)      |
+                |&lt;----------------------------------------------|(ESN 2 SSN 3)
+                |                                               |
+                |                                               |
+                |             Message 5 (Type 2-Movie Request)  |
+   (ESN 4 SSN 2)|----------------------------------------------&gt;|
+                |                                               |
+                |                                               |
+
+		
+		</artwork></figure></t>
+    </section><!--End of example 2-->
+          
+     <section title="Scenario 3: function of room flag">
+    <t>
+        The room flag is used to know the current room of the user. When the client in scenario 1 sends a user login request (Message type 0) to the server, the first message sets the flag to 00. 
+	When the server responds to a movie request the message sets the flag to 01.
+		
+    </t>  
+
+    </section><!--End of examples-->
+
+    <section title="Conclusion">
+        <t>
+            In this specification we took care of reliability. It functions under either TCP or UDP.
+        </t>
+    </section>
+
+ 
+    <section anchor="Acknowledgements" title="Acknowledgements">
+      <t>This template was derived from an initial version written by Pekka
+      Savola and contributed by him to the xml2rfc project.</t>
+
+      <t>This document is part of a plan to make xml2rfc indispensable <xref
+      target="DOMINATION"></xref>.</t>
+    </section>
+    </section>
+  </middle>
+
+  <!--  *****BACK MATTER ***** -->
+
+  <back>
+    <!-- References split into informative and normative -->
+
+    <!-- There are 2 ways to insert reference entries from the citation libraries:
+     1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+     2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+        (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+
+     Both are cited textually in the same manner: by using xref elements.
+     If you use the PI option, xml2rfc will, by default, try to find included files in the same
+     directory as the including file. You can also define the XML_LIBRARY environment variable
+     with a value containing a set of directories to search.  These can be either in the local
+     filing system or remote ones accessed by http (http://domain/dir/... ).-->
+
+    <references title="Normative References">
+      <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
+
+
+      <reference anchor="min_ref">
+        <!-- the following is the minimum to make xml2rfc happy -->
+
+        <front>
+          <title>Minimal Reference</title>
+
+          <author initials="authInitials" surname="authSurName">
+            <organization></organization>
+          </author>
+
+          <date year="2006" />
+        </front>
+      </reference>
+    </references>
+
+    <references title="Informative References">
+      <!-- Here we use entities that we defined at the beginning. -->
+      <!-- A reference written by an organization not a person. -->
+
+      <reference anchor="DOMINATION"
+                 target="http://www.example.com/dominator.html">
+        <front>
+          <title>Ultimate Plan for Taking Over the World</title>
+
+          <author>
+            <organization>Mad Dominators, Inc.</organization>
+          </author>
+
+          <date year="1984" />
+        </front>
+      </reference>
+      
+      <reference anchor="IDSample"
+       target="http://tools.ietf.org/tools/templates/draft-davies-template-bare.txt">
+        
+
+        <front>
+          <title>Internet Draft Sample</title>
+
+          <author initials="E. D." surname="Davies">
+            <organization></organization>
+          </author>
+
+          <date year="2006" />
+        </front>
+      </reference>
+    </references>
+    
+
+
+    <!-- Change Log
+
+v00 2014-03-01  MJ  Initial version -->
+
+
+  </back>
+</rfc>

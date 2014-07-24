@@ -1,0 +1,48 @@
+     Client                                           Server
+        |                                               |
+        |             Message 1 (0-Login Request)       |
+        |---------------------------------------------->|
+        |            (details of the message)           |
+        |                                               |
+        |                                               |
+        |               Message 2 (1-Response)          |
+        |<----------------------------------------------|
+        |              (Connection Success)             |
+		|                                               |
+		|                                               |
+		|               Message 3 (8-Movie List)        |
+		|<----------------------------------------------|
+		|                                               |
+		|               Message 4 (9-User List)         |
+		|<----------------------------------------------|
+		|                                               |
+		|               Message 5 (2-Movie Request)     |
+		|---------------------------------------------->|
+		|             (Join Movie Room)                 |
+		|                                               |
+		|                                               |
+		|               Message 6 (3-Movie Connect)     |
+        |<----------------------------------------------|
+		|             (Server connect client to         |
+		|                     Movie room)               |
+		|                                               |
+		|               Message 7 (4-Chat Message)      |
+		|---------------------------------------------->|
+		|             (Client sends message)            |
+		|                                               |
+		|                                               |
+		|               Message 8 (4-Chat Message)      |
+        |<----------------------------------------------|
+		|             (Server sends message to          |
+		|                users in Movie room)           |
+		|                                               |
+		|               Message 9 (5-Leave Room)        |
+		|---------------------------------------------->|
+		|             (Client clicks on leave button)   |
+		|                                               |
+		|                                               |
+		|               Message 10 (7-Leave Ack)        |
+        |<----------------------------------------------|
+		|             (Server responds to leave         |
+		|                request)                       |
+		|                                               |

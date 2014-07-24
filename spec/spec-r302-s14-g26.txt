@@ -1,0 +1,448 @@
+
+
+
+
+Network Working Group                                          A. BAUDOT
+Internet-Draft
+Intended status: Informational                                    B. CUI
+Expires: September 3, 2014
+                                                               M. JERRIM
+
+                                                               M. KETEVI
+                                                        Telecom Bretagne
+                                                           March 2, 2014
+
+
+             Group 26: c2w protocol specification proposal
+                     draft-ietf-xml2rfc-template-05
+
+Abstract
+
+   The c2w protocol is a session-based protocol which supports the
+   application Chat While Watching(c2w).  The protocol allows the use of
+   either TCP or UDP by the client.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on September 3, 2014.
+
+Copyright Notice
+
+   Copyright (c) 2014 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+
+
+
+BAUDOT, et al.          Expires September 3, 2014               [Page 1]
+
+Internet-Draft     Group 26 c2w protocol specification        March 2014
+
+
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+   2.  Packet format . . . . . . . . . . . . . . . . . . . . . . . .   2
+   3.  Message Type Contents . . . . . . . . . . . . . . . . . . . .   4
+   4.  Example scenarios . . . . . . . . . . . . . . . . . . . . . .   5
+     4.1.  Scenario 1: user login, movie request and chat message  .   5
+     4.2.  Scenario 2: function of the sequence numbers  . . . . . .   6
+     4.3.  Scenario 3: function of room flag . . . . . . . . . . . .   7
+     4.4.  Conclusion  . . . . . . . . . . . . . . . . . . . . . . .   7
+     4.5.  Acknowledgements  . . . . . . . . . . . . . . . . . . . .   7
+   5.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
+     5.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
+     5.2.  Informative References  . . . . . . . . . . . . . . . . .   8
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
+
+1.  Introduction
+
+   The c2w protocol is a session-based protocol which supports the
+   application Chat While Watching(c2w).  The protocol allows the use of
+   either TCP or UDP by the client.  The server will respond with the
+   same layer four protocol.  All messages use the same format.
+
+2.  Packet format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+BAUDOT, et al.          Expires September 3, 2014               [Page 2]
+
+Internet-Draft     Group 26 c2w protocol specification        March 2014
+
+
+       0                   1                   2                   3
+       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |   Message | RF|    Expected   |   Sent Seq    |    Packet     |
+       |   Type    |   |     Seq No    |      No       |    Length     |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |                                                               |
+       |                        User Name                              |
+       |                                                               |
+       |                                                               |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |                         IP Address                            |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |         Port Number           |                               |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               |
+       |                                                               |
+       .                                                               .
+       .                       Message Data (variable)                 .
+       .                                                               .
+       |                                                               |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+                                 Figure 1
+
+   Message Type: 6 bits coded in binary.
+
+                 +------+-------------------------------+
+                 | Type |            Meaning            |
+                 +------+-------------------------------+
+                 |  0   |         Login Request         |
+                 |  1   |       Connection Success      |
+                 |  2   |         Movie Request         |
+                 |  3   | Movie Connection To Join Room |
+                 |  4   |          Chat Message         |
+                 |  5   |           Leave Room          |
+                 |  6   |         Error Message         |
+                 |  7   |     Leave Acknowledgement     |
+                 |  8   |           Movie List          |
+                 |  9   |           User List           |
+                 +------+-------------------------------+
+
+                 Table 1: Currently defined message types
+
+   Room Flag: 2 bits coded in binary.
+
+      The Room Flag is '00' to indicate 'A' for Main Room, '01'
+      indicates 'M' for movie room and '10' indicates 'P' for private
+      room
+
+
+
+BAUDOT, et al.          Expires September 3, 2014               [Page 3]
+
+Internet-Draft     Group 26 c2w protocol specification        March 2014
+
+
+   Expected Sequence Number: 8 bits coded in binary.
+
+      The Sequence number expected by the receiver
+
+   Sent Sequence Number: 8 bits coded in binary.
+
+      The current Sequence number being sent
+
+   Packet Length: 8 bits coded in binary.
+
+      The length of the packet in bits
+
+   User Name: 32 bytes in plain text.
+
+      Login name of the user
+
+   IP Address: 32 bits coded in binary.
+
+      The source IP Address
+
+   Port Number: 16 bits coded in binary.
+
+      The source port number
+
+3.  Message Type Contents
+
+   Message Type 0 - Login Request.  Message Data is left empty.
+
+   Message Type 1 - Connection Success.  Message Data is left empty.
+
+   Message Type 2 - Movie Request.  Message data contains the text of
+   the movie title.
+
+   Message Type 3 - Movie Connection To Join Room.  Message Data is left
+   empty.
+
+   Message Type 4 - Chat Message.  Message data contains the text of the
+   chat message.
+
+   Message Type 5 - Leave Room.  Message Data is left empty.
+
+   Message Type 6 - Error Message.  Message Data is the text of any
+   error message produced.
+
+   Message Type 7 - Leave Acknowledgement.  Message Data is left empty.
+
+
+
+
+
+
+BAUDOT, et al.          Expires September 3, 2014               [Page 4]
+
+Internet-Draft     Group 26 c2w protocol specification        March 2014
+
+
+   Message Type 8 - Movie List.  Message data contains a text list of
+   available movies in the format: Title, IP Address, Port Number Each
+   tuple is delimited by the sequence \n
+
+   Message Type 9 - User List.  Message data contains a text list of
+   users in the current room in the format: Username Each username is
+   delimited by the sequence \n
+
+4.  Example scenarios
+
+4.1.  Scenario 1: user login, movie request and chat message
+
+   The client sends a user login request (Message type 0) to the server.
+   The message data for this message type should be empty.  If the user
+   login is successful the server responds with 3 packets, a message
+   type 1 (connection successful), a message type 8 (listing the movies
+   available) and a message type 9 (listing the users who are online).
+   The user selects a movie from the list and the client then sends a
+   message type 2 (Movie request) to connect to a particular movie room.
+   This packet contains the IP address and port number of the requested
+   movie.  The server responds to this with a message type 3 (Movie
+   connect) which connects the client to the movie.  The user may then
+   send a chat message to the users in the same room.  The client sends
+   a message type 4 (Chat message) to the server which then sends the
+   same message to the other users in the movie room.  When the user is
+   finished, he clicks on the leave button in the application.  The
+   client then sends a message type 5 (Leave room) to the server, which
+   responds with a message type 7 (Leave Ack) to acknowledge that the
+   connection is now closed.
+
+
+           Client                                       Server
+           |                                               |
+           |             Message 1 (0-Login Request)       |
+           |---------------------------------------------->|
+           |            (details of the message)           |
+           |                                               |
+           |                                               |
+           |             Message 2 (Type 1-Response)       |
+           |<----------------------------------------------|
+           |              (Connection Success)             |
+           |                                               |
+           |                                               |
+           |             Message 3 (Type 8-Movie List)     |
+           |<----------------------------------------------|
+           |               (List of movies)                |
+           |                                               |
+           |             Message 4 (Type 9-User List)      |
+
+
+
+BAUDOT, et al.          Expires September 3, 2014               [Page 5]
+
+Internet-Draft     Group 26 c2w protocol specification        March 2014
+
+
+           |<----------------------------------------------|
+           |               (List of users online)          |
+           |                                               |
+           |             Message 5 (Type 2-Movie Request)  |
+           |---------------------------------------------->|
+           |             (Join Movie Room)                 |
+           |                                               |
+           |                                               |
+           |             Message 6 (Type 3-Movie Connect)  |
+           |<----------------------------------------------|
+           |             (Server connects client to        |
+           |                     Movie room)               |
+           |                                               |
+           |             Message 7 (Type 4-Chat Message)   |
+           |---------------------------------------------->|
+           |             (Client sends message)            |
+           |                                               |
+           |                                               |
+           |            Message 8 (Type 4-Chat Message)    |
+           |<----------------------------------------------|
+           |             (Server sends message to          |
+           |                users in Movie room)           |
+           |                                               |
+           |            Message 9 (Type 5-Leave Room)      |
+           |---------------------------------------------->|
+           |             (Client clicks on leave button)   |
+           |                                               |
+           |                                               |
+           |            Message 10 (Type 7-Leave Ack)      |
+           |<----------------------------------------------|
+           |             (Server responds to leave         |
+           |                request)                       |
+           |                                               |
+
+
+4.2.  Scenario 2: function of the sequence numbers
+
+   The sequence number is used to keep track of packets lost during
+   transmission.  When the client in scenario 1 sends a user login
+   request (Message type 0) to the server, the first message sets the
+   sent sequence number(SSN) to 1 and the expected sequence number(ESN)
+   to 1.  If the user login is successful the server responds with 3
+   packets, a message type 1 (connection successful) with the SSN set to
+   1 and the ESN set to 2, a message type 8 (listing the movies
+   available) with the SSN set to 2 and the ESN set to 2 and a message
+   type 9 (listing the users who are online) with the SSN set to 3 and
+   the ESN set to 2.  The user selects a movie from the list and the
+
+
+
+
+BAUDOT, et al.          Expires September 3, 2014               [Page 6]
+
+Internet-Draft     Group 26 c2w protocol specification        March 2014
+
+
+   client then sends a message type 2 (Movie request) with the SSN set
+   to 2 and the ESN set to 4.
+
+             Client                                           Server
+                |                                               |
+                |             Message 1 (0-Login Request)       |
+   (ESN 1 SSN 1)|---------------------------------------------->|
+                |                                               |
+                |                                               |
+                |                                               |
+                |             Message 2 (Type 1-Response)       |
+                |<----------------------------------------------| (ESN 2 SSN 1)
+                |                                               |
+                |                                               |
+                |                                               |
+                |             Message 3 (Type 8-Movie List)     |
+                |<----------------------------------------------| (ESN 2 SSN 2)
+                |                                               |
+                |                                               |
+                |             Message 4 (Type 9-User List)      |
+                |<----------------------------------------------|(ESN 2 SSN 3)
+                |                                               |
+                |                                               |
+                |             Message 5 (Type 2-Movie Request)  |
+   (ESN 4 SSN 2)|---------------------------------------------->|
+                |                                               |
+                |                                               |
+
+
+
+4.3.  Scenario 3: function of room flag
+
+   The room flag is used to know the current room of the user.  When the
+   client in scenario 1 sends a user login request (Message type 0) to
+   the server, the first message sets the flag to 00.  When the server
+   responds to a movie request the message sets the flag to 01.
+
+4.4.  Conclusion
+
+   In this specification we took care of reliability.  It functions
+   under either TCP or UDP.
+
+4.5.  Acknowledgements
+
+   This template was derived from an initial version written by Pekka
+   Savola and contributed by him to the xml2rfc project.
+
+
+
+
+
+BAUDOT, et al.          Expires September 3, 2014               [Page 7]
+
+Internet-Draft     Group 26 c2w protocol specification        March 2014
+
+
+   This document is part of a plan to make xml2rfc indispensable
+   [DOMINATION].
+
+5.  References
+
+5.1.  Normative References
+
+   [min_ref]  authSurName, authInitials., "Minimal Reference", 2006.
+
+5.2.  Informative References
+
+   [DOMINATION]
+              Mad Dominators, Inc., "Ultimate Plan for Taking Over the
+              World", 1984, <http://www.example.com/dominator.html>.
+
+   [IDSample]
+              Davies, E., "Internet Draft Sample", 2006,
+              <http://tools.ietf.org/tools/templates/
+              draft-davies-template-bare.txt>.
+
+Authors' Addresses
+
+   Alex Baudot
+
+   Email: axel.baudot@telecom-bretagne.eu
+
+
+   Biwei Cui
+
+   Email: biwei.cui@telecom-bretagne.eu
+
+
+   Mark Jerrim
+
+   Email: mark.jerrim@telecom-bretagne.eu
+
+
+   Maurice KETEVI
+   Telecom Bretagne
+   Brest
+   France
+
+   Email: maurice.ketevi@telecom-bretagne.eu
+
+
+
+
+
+
+
+
+BAUDOT, et al.          Expires September 3, 2014               [Page 8]
